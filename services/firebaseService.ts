@@ -5,7 +5,7 @@ import {
 } from 'firebase/firestore';
 import {
     createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
-    updateProfile
+    updateProfile, GoogleAuthProvider, signInWithPopup
 } from 'firebase/auth';
 import { UserProfile, UserRole, Event, TicketValidation, OrganizerRequest } from '../types';
 
@@ -44,6 +44,38 @@ export const dbService = {
     },
 
     // --- Auth (Global) ---
+
+    // Google Login
+    loginWithGoogle: async (): Promise<{ user: UserProfile | null, error?: string }> => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            // Check if user exists in Firestore
+            const userDoc = await getDoc(doc(firestore, USERS_COLLECTION, user.uid));
+
+            if (userDoc.exists()) {
+                const userData = userDoc.data() as UserProfile;
+                if (userData.blocked) return { user: null, error: "Account Blocked." };
+                return { user: { ...userData, uid: user.uid } };
+            } else {
+                // Create new user profile for Google Sign-In users
+                const newUser: UserProfile = {
+                    uid: user.uid,
+                    name: user.displayName || 'Google User',
+                    email: user.email || '',
+                    role: UserRole.USER, // Default to USER
+                    avatar: user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}`,
+                    blocked: false
+                };
+                await setDoc(doc(firestore, USERS_COLLECTION, user.uid), newUser);
+                return { user: newUser };
+            }
+        } catch (error: any) {
+            return { user: null, error: error.message };
+        }
+    },
 
     // USER REGISTRATION
     signupUser: async (data: { name: string, email: string, phone: string }, password?: string): Promise<UserProfile> => {
