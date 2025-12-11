@@ -11,7 +11,7 @@ import {
 import { PWAInstallModal } from './components/PWAInstallModal';
 
 // --- Constants ---
-const SQUADRAN_LOGO_URL = "./logo squadran.jpg";
+const SQUADRAN_LOGO_URL = "/logo.png.jpg";
 const SUPPORT_EMAIL_PLACEHOLDER = "support@fluxo.io";
 
 // --- Animation Component ---
