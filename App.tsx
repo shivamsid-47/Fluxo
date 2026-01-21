@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect, useRef } from 'react';
 import { UserRole, ViewType, UserProfile, FeatureType, Feature, Event, TicketValidation, OrganizerRequest } from './types';
 import { db } from './services/firebaseService';
@@ -9,6 +10,8 @@ import {
     Ticket, Award, PieChart, PlusCircle, Clock, FileText
 } from 'lucide-react';
 import { PWAInstallModal } from './components/PWAInstallModal';
+import { ContactSection } from './components/ContactSection';
+
 
 // --- Constants ---
 const SQUADRAN_LOGO_URL = "/logo.png.jpg";
@@ -1074,35 +1077,7 @@ const App: React.FC = () => {
                 </div>
 
                 {/* CONTACT SUPPORT SECTION */}
-                <div className="py-16 max-w-2xl mx-auto w-full animate-fade-in-up border-t border-slate-200/50">
-                    <div className="text-center mb-8">
-                        <h2 className="text-3xl font-black text-slate-900 mb-2">Contact Support</h2>
-                        <p className="text-slate-500 font-bold">Questions? Issues? We're here to help.</p>
-                    </div>
-
-                    <div className="bg-white p-8 rounded-[2rem] shadow-lg border border-slate-100">
-                        <form onSubmit={handleContactSubmit} className="space-y-4">
-                            <div>
-                                <label className="text-xs font-bold text-slate-400 ml-2 mb-2 block uppercase">Name</label>
-                                <input required value={contactForm.name} onChange={e => setContactForm({ ...contactForm, name: e.target.value })} className="w-full p-4 bg-slate-50 rounded-xl font-bold outline-none focus:ring-2 focus:ring-brand-blue/20" placeholder="Your Name" />
-                            </div>
-                            <div>
-                                <label className="text-xs font-bold text-slate-400 ml-2 mb-2 block uppercase">Email</label>
-                                <input required type="email" value={contactForm.email} onChange={e => setContactForm({ ...contactForm, email: e.target.value })} className="w-full p-4 bg-slate-50 rounded-xl font-bold outline-none focus:ring-2 focus:ring-brand-blue/20" placeholder="your@email.com" />
-                            </div>
-                            <div>
-                                <label className="text-xs font-bold text-slate-400 ml-2 mb-2 block uppercase">Message</label>
-                                <textarea required rows={4} value={contactForm.message} onChange={e => setContactForm({ ...contactForm, message: e.target.value })} className="w-full p-4 bg-slate-50 rounded-xl font-medium outline-none resize-none focus:ring-2 focus:ring-brand-blue/20" placeholder="How can we help?"></textarea>
-                            </div>
-                            <button type="submit" className="w-full py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 shadow-lg flex items-center justify-center gap-2">
-                                <Send size={18} /> Send Message
-                            </button>
-                            <p className="text-center text-xs text-slate-400 mt-4">
-                                Emails are sent to <span className="font-bold text-slate-500">{SUPPORT_EMAIL_PLACEHOLDER}</span>
-                            </p>
-                        </form>
-                    </div>
-                </div>
+                <ContactSection />
 
                 {/* ROOT LOGIN MODAL */}
                 {showRootLogin && (
